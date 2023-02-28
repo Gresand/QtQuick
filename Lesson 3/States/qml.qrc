@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MyButton.qml</file>
+        <file>LoginTextField.qml</file>
+        <file>PasswordTextField.qml</file>
+        <file>ButLoad.qml</file>
+    </qresource>
+</RCC>
