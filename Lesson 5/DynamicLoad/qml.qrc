@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>FunctionDynamicLoad.js</file>
+        <file>PageEnter.qml</file>
+        <file>PageTwo.qml</file>
+    </qresource>
+</RCC>
