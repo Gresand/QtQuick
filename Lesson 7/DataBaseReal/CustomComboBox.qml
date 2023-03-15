@@ -1,6 +1,7 @@
 import QtQuick 2.14
-//import QtQuick.Controls.impl
+import QtQuick.Controls.impl 2.15
 import QtQuick.Templates 2.15 as T
+import QtQuick.Controls 2.15
 
 T.ComboBox {
     id: control
@@ -14,25 +15,58 @@ T.ComboBox {
     leftPadding: padding + (!control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
     rightPadding: padding + (control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
 
-    //Из-за этого не работают эти элементы, хотя примерно представляю как повернуть стрелку
-//    delegate: ItemDelegate {
-//        width: ListView.view.width
-//        text: control.textRole ? (Array.isArray(control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
-//        palette.text: control.palette.text
-//        palette.highlightedText: control.palette.highlightedText
-//        font.weight: control.currentIndex === index ? Font.DemiBold : Font.Normal
-//        highlighted: control.highlightedIndex === index
-//        hoverEnabled: control.hoverEnabled
-//    }
-
-//    indicator: ColorImage {
-//        x: control.mirrored ? control.padding : control.width - width - control.padding
-//        y: control.topPadding + (control.availableHeight - height) / 2
-//        color: control.palette.dark
-//        defaultColor: "#353637"
-//        source: "qrc:/qt-project.org/imports/QtQuick/Controls/Basic/images/double-arrow.png"
-//        opacity: enabled ? 1 : 0.3
-//    }
+    delegate: ItemDelegate {
+        id:itemDelegate
+        property var modelData: null
+        width: ListView.view.width
+        text: control.textRole ? (Array.isArray(control.model) ? itemDelegate.modelData[control.textRole] : itemDelegate.model[control.textRole]) : itemDelegate.modelData
+        palette.text: control.palette.text
+        palette.highlightedText: control.palette.highlightedText
+        font.weight: control.currentIndex === index ? Font.DemiBold : Font.Normal
+        highlighted: control.highlightedIndex === index
+        hoverEnabled: control.hoverEnabled
+    }
+    state: "close"
+    states: [
+        State {
+            name: "close"
+            PropertyChanges {
+                target: colorImage
+                rotation: 0
+            }
+        },
+        State {
+            name: "open"
+            PropertyChanges {
+                target: colorImage
+                rotation: 180
+            }
+        }
+    ]
+    transitions: [
+        Transition {
+            from: "close"
+            to: "open"
+            PropertyAnimation {duration: 200}
+            reversible: true
+        }
+    ]
+    onActivated: {
+        if (state === "close") {
+            state = "open";
+        } else {
+            state = "close";
+        }
+    }
+    indicator: ColorImage {
+        id: colorImage
+        x: control.mirrored ? control.padding : control.width - width - control.padding
+        y: control.topPadding + (control.availableHeight - height) / 2
+        color: control.palette.dark
+        defaultColor: "#353637"
+        source: "qrc:/qt-project.org/imports/QtQuick/Controls/Basic/images/drop-indicator.png"
+        opacity: enabled ? 1 : 0.3
+    }
 
     contentItem: T.TextField {
         leftPadding: !control.mirrored ? 12 : control.editable && activeFocus ? 3 : 1

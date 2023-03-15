@@ -12,34 +12,49 @@ Window {
     title: qsTr("DB Example")
     property int cellHorizontalSpacing: 10
     property var db
-    TableModel {
-        id: tableModel
-        TableModelColumn { display: "id" }
-        TableModelColumn { display: "first_name" }
-        TableModelColumn { display: "last_name" }
-        TableModelColumn { display: "email" }
-        TableModelColumn { display: "phone" }
-        rows: []
-    }
-    TableView {
-        id: table
-        anchors.fill: parent
-        columnSpacing: 1
-        rowSpacing: 1
-        model: tableModel
-        delegate: Rectangle {
-            implicitWidth: Math.max(100, /*left*/ cellHorizontalSpacing + innerText.width + /*right*/
-                                    cellHorizontalSpacing)
-            implicitHeight: 50
-            border.width: 1
-            Text {
-                id: innerText
-                text: display
-                anchors.centerIn: parent
-            }
+    //Опять возился не понимаю почему такой цвет и вообще так выглядит форма, но я уже столько вопросов задал что мне стыдно, поэтому придется так
+    CustomComboBox {
+        anchors.bottom: button.top
+        height: 50
+        width: parent.width
+        currentIndex: 2
+        model: ListModel {
+            id: cbItems
+            ListElement { text: "Banana"; color: "Yellow" }
+            ListElement { text: "Apple"; color: "Green" }
+            ListElement { text: "Coconut"; color: "Brown" }
         }
+        onCurrentIndexChanged: console.debug(cbItems.get(currentIndex).text + ", " + cbItems.get(currentIndex).color)
     }
-    //Кастомный popup с закругленными краями
+
+//    TableModel {
+//        id: tableModel
+//        TableModelColumn { display: "id" }
+//        TableModelColumn { display: "first_name" }
+//        TableModelColumn { display: "last_name" }
+//        TableModelColumn { display: "email" }
+//        TableModelColumn { display: "phone" }
+//        rows: []
+//    }
+//    TableView {
+//        id: table
+//        anchors.fill: parent
+//        columnSpacing: 1
+//        rowSpacing: 1
+//        model: tableModel
+//        delegate: Rectangle {
+//            implicitWidth: Math.max(100, /*left*/ cellHorizontalSpacing + innerText.width + /*right*/
+//                                    cellHorizontalSpacing)
+//            implicitHeight: 50
+//            border.width: 1
+//            Text {
+//                id: innerText
+//                text: display
+//                anchors.centerIn: parent
+//            }
+//        }
+//    }
+//    //Кастомный popup с закругленными краями
     RoundPopup {
         id:popup
         anchors.centerIn: parent
